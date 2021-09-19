@@ -16,7 +16,7 @@ You can use this script only if indexer-agent is running in docker container.
 
 ## Usage example:
 ```bash
-usage: close_allocation_with_zero_poi.py [-h] --subgraph_ipfs_hash SUBGRAPH_IPFS_HASH [--indexer_agent_container_name INDEXER_AGENT_CONTAINER_NAME]
+usage: graphprotocol-zero-poi-script.py [-h] --subgraph_ipfs_hash SUBGRAPH_IPFS_HASH [--indexer_agent_container_name INDEXER_AGENT_CONTAINER_NAME]
                                          [--gas_limit_for_transaction GAS_LIMIT_FOR_TRANSACTION]
 
 optional arguments:
