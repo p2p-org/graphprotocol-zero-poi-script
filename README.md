@@ -7,9 +7,17 @@ You can use this script only if indexer-agent is running in docker container.
 2. Get abi from https://gist.github.com/abarmat/b8f4c66b4d0cdd07e121290894f5dbb6
 3. Stop indexer agent container
 4. Show rules which will be deleted from database. At this step you have 30 seconds to cancel future steps.
-5. Delete rules from db. **If script fails on this step you need to do next steps manually**
-6. Create transaction. You can find txn hash in script's output. **If script fails on this step you need to create txn manually using [remix](https://remix.ethereum.org/) or using [etherscan](https://etherscan.io/)**
-7. Start indexer agent container. **If script fails on this step you need to start indexer agent manually**
+5. Delete rules from db.
+
+!!!**If script fails on this step you need to do next steps manually**
+
+6. Create transaction. You can find txn hash in script's output.
+
+!!!!**If script fails on this step you need to create txn manually using [remix](https://remix.ethereum.org/) or using [etherscan](https://etherscan.io/)**
+
+7. Start indexer agent container.
+
+!!!**If script fails on this step you need to start indexer agent manually**
 
 ## Usage example:
 ```bash
