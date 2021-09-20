@@ -104,6 +104,23 @@ def get_contract_abi_from_github() -> dict:
     return json_response
 
 
+def wait_for_txns(txns: list, ethereum_rpc: str) -> list:
+    if len(txns) == 0:
+        raise ValueError("Txn list is empty")
+    if len(ethereum_rpc) == 0:
+        raise ValueError("Ethereum rpc is empty")
+
+    timeout_for_txn_receipt_wait = "300" #in seconds
+    failed_txns = []
+
+    w3 = web3.Web3(web3.Web3.HTTPProvider(ethereum_rpc))
+    for txn in txns:
+        receipt = w3.wait_for_transaction_receipt(txn,timeout=timeout_for_txn_receipt_wait)
+        if receipt.status = 0:
+            failed_txns.append(txn)
+    return failed_txns
+
+
 def create_txn(mnemonic: str, allocations: dict, poi: str, ethereum_rpc: str, contract_address: str, abi: dict, gas_limit_for_transaction: int) -> list:
     if len(mnemonic) == 0:
         raise ValueError("Mnemonic is empty")
@@ -348,6 +365,18 @@ if __name__ == "__main__":
         logger.info("Txns: {0}".format(txns))
     except:
         logger.critical("Failed to create txn")
+        logging.exception("Exception: ")
+        logger.critical("Don't forget to close allocation manually or to add rule to db again and start indexer agent container")
+        sys.exit(1)
+
+    try:
+        logger.info("Wait for txns to be included in block:\nTxn list {0}".format(txns)
+        logger.debug("Function wait_for_txns({0},{1})".format(txns, agent_vars["INDEXER_AGENT_ETHEREUM"]))
+        failed_txns = wait_for_txns(txns, agent_vars["INDEXER_AGENT_ETHEREUM"])
+        if len(failed_txns) > 0:
+            raise ValueError("One or more failed txns".format(failed_txns))
+    except:
+        logger.critical("Txns failed to execute")
         logging.exception("Exception: ")
         logger.critical("Don't forget to close allocation manually or to add rule to db again and start indexer agent container")
         sys.exit(1)
