@@ -31,4 +31,14 @@ optional arguments:
 
 ## Requirements:
 
+This package need for python psycopg2
+
+```apt-get install libpq-dev```
+
 ```pip3 install -r requirements.txt```
+
+If you have problems with psycopg2, you can install psycopg2-binary
+
+```pip3 install psycopg2-binary```
+
+
