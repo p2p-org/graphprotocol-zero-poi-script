@@ -14,6 +14,10 @@ You can use this script only if indexer-agent is running in docker container.
 7. Start indexer agent container.
 - **If script fails on this step you need to start indexer agent manually**
 
+Also you can't close allocation more than one time per epoch. So sometimes txn can be reverted with error:
+
+```Fail with error '&lt;epochs'```
+
 ## Usage example:
 ```bash
 usage: graphprotocol-zero-poi-script.py [-h] --subgraph_ipfs_hash SUBGRAPH_IPFS_HASH [--indexer_agent_container_name INDEXER_AGENT_CONTAINER_NAME]
