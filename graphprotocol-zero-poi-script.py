@@ -374,7 +374,7 @@ if __name__ == "__main__":
         logger.debug("Function wait_for_txns({0},{1})".format(txns, agent_vars["INDEXER_AGENT_ETHEREUM"]))
         failed_txns = wait_for_txns(txns, agent_vars["INDEXER_AGENT_ETHEREUM"])
         if len(failed_txns) > 0:
-            raise ValueError("One or more failed txns".format(failed_txns))
+            raise ValueError("One or more failed txns\nFailed txns list: {0}".format(failed_txns))
     except:
         logger.critical("Txns failed to execute")
         logging.exception("Exception: ")
