@@ -110,12 +110,11 @@ def wait_for_txns(txns: list, ethereum_rpc: str) -> list:
     if len(ethereum_rpc) == 0:
         raise ValueError("Ethereum rpc is empty")
 
-    timeout_for_txn_receipt_wait = "300" #in seconds
     failed_txns = []
 
     w3 = web3.Web3(web3.Web3.HTTPProvider(ethereum_rpc))
     for txn in txns:
-        receipt = w3.wait_for_transaction_receipt(txn,timeout=timeout_for_txn_receipt_wait)
+        receipt = w3.eth.waitForTransactionReceipt(txn)
         if receipt.status == 0:
             failed_txns.append(txn)
     return failed_txns
@@ -371,7 +370,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        logger.info("Wait for txns to be included in block:\nTxn list {0}".format(txns)
+        logger.info("Wait for txns to be included in block:\nTxn list {0}".format(txns))
         logger.debug("Function wait_for_txns({0},{1})".format(txns, agent_vars["INDEXER_AGENT_ETHEREUM"]))
         failed_txns = wait_for_txns(txns, agent_vars["INDEXER_AGENT_ETHEREUM"])
         if len(failed_txns) > 0:
