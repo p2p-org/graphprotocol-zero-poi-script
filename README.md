@@ -2,11 +2,11 @@
 Python3 script to close allocations using zero poi for provided subgraph.
 You can use this script only if indexer-agent is running in docker container.
 
-## Action which performed by script.
+## Actions which performed by script.
 1. Getting env variables (mnemonic, network, ethereum endpoint, postgresql credentials and url) from indexer agent container
 2. Get abi from https://gist.github.com/abarmat/b8f4c66b4d0cdd07e121290894f5dbb6
 3. Stop indexer agent container
-4. Show rules which will be deleted from database. At this step you have 30 seconds to cancel future steps.
+4. Show rules which will be deleted from database and allocations which will be closed. At this step you have 30 seconds to cancel future actions.
 5. Delete rules from db.
 - **If script fails on this step you need to do next steps manually**
 6. Create transaction. You can find txn hash in script's output.
