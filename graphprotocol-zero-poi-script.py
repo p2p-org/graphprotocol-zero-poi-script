@@ -116,7 +116,7 @@ def wait_for_txns(txns: list, ethereum_rpc: str) -> list:
     w3 = web3.Web3(web3.Web3.HTTPProvider(ethereum_rpc))
     for txn in txns:
         receipt = w3.wait_for_transaction_receipt(txn,timeout=timeout_for_txn_receipt_wait)
-        if receipt.status = 0:
+        if receipt.status == 0:
             failed_txns.append(txn)
     return failed_txns
 
