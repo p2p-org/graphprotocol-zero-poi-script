@@ -12,7 +12,7 @@ You can use this script only if indexer-agent is running in docker container.
 6. Create transaction. You can find txn hash in script's output.
 - **If script fails on this step you need to create txn manually using [remix](https://remix.ethereum.org/) or using [etherscan](https://etherscan.io/)**
 7. Wait until transaction receipt will be created. And check transaction status. **If transaction status not equals to one. Script will stop here, so you need to close allocation and start indexer agent manually.**
-8. Start indexer agent container.
+8. Start indexer agent container. Before starting indexer agent container script wait 3 mins for block confirmation, overwise after starting indexer agent will create close transactions for all deleted db rules.
 - **If script fails on this step you need to start indexer agent manually**
 
 Also you can't close allocation more than one time per epoch. So sometimes txn can be reverted with error:
