@@ -326,6 +326,7 @@ if __name__ == "__main__":
         rules_to_delete = get_rule_from_db(agent_vars["INDEXER_AGENT_POSTGRES_DATABASE"], agent_vars["SERVER_DB_USER"],
                             agent_vars["SERVER_DB_PASSWORD"], agent_vars["INDEXER_AGENT_POSTGRES_HOST"],
                             subgraph_deployment_id)
+        logger.info("Script will create {0} txns for close all active allocations\nAllocations: {1}".format(len(allocations),allocations))
         logger.info("Script will delete {1} rules:\n{0}\nIf you make a mistake you have 30 seconds to press CTRL+C.".format(rules_to_delete, len(rules_to_delete)))
         if len(rules_to_delete) == 0:
             raise ValueError("No rules for {0} in db".format(subgraph_ipfs_hash))
@@ -375,6 +376,8 @@ if __name__ == "__main__":
         failed_txns = wait_for_txns(txns, agent_vars["INDEXER_AGENT_ETHEREUM"])
         if len(failed_txns) > 0:
             raise ValueError("One or more failed txns\nFailed txns list: {0}".format(failed_txns))
+        logger.info("Wait for block to be confirmed, overwise after starting indexer agent he will create another txns for closing allocations")
+        time.sleep(180)
     except:
         logger.critical("Txns failed to execute")
         logging.exception("Exception: ")
