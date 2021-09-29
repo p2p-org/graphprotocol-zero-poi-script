@@ -1,0 +1,25 @@
+# Security check for the requeriments.txt file
+name: Security checks
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install safety
+        run: pip install safety
+      
+      - name: Validate requriments.txt
+        run: safety check -r requirements.txt
