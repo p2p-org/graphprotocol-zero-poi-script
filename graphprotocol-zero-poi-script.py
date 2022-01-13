@@ -126,6 +126,10 @@ def wait_for_txns(txns: list, ethereum_rpc: str) -> list:
     failed_txns = []
 
     w3 = web3.Web3(web3.Web3.HTTPProvider(ethereum_rpc))
+
+    #https://stackoverflow.com/questions/68449832/web3-extradatalength-error-on-the-binance-smart-chain-using-python
+    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+
     for txn in txns:
         receipt = w3.eth.waitForTransactionReceipt(txn)
         if receipt.status == 0:
