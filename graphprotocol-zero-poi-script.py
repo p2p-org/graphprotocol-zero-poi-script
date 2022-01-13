@@ -11,6 +11,9 @@ import psycopg2
 import logging
 import sys
 import base58
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
 
 #Map for choose correct contract address for testnet or for mainnet
 contract_address_map = {
@@ -94,7 +97,17 @@ def get_contract_address(network: str) -> str:
 
 def get_contract_abi_from_github() -> dict:
     logger.debug("Get abi from github")
-    request = requests.get(abi_github_url)
+
+    #https://stackoverflow.com/questions/15431044/can-i-set-max-retries-for-requests-request
+    s = requests.Session()
+
+    retries = Retry(total=6,
+                    backoff_factor=0.1,
+                    status_forcelist=[ 500, 502, 503, 504, 404 ],
+                    allowed_methods=frozenset(['GET', 'POST']))
+    s.mount('http://', HTTPAdapter(max_retries=retries))
+
+    request = s.get(abi_github_url)
 
     if request.status_code != 200:
         raise ValueError("Status code: {0}\nResponse: {1}".format(request.status_code,request.text))
@@ -152,15 +165,18 @@ def create_txn(mnemonic: str, allocations: dict, poi: str, ethereum_rpc: str, co
 
     gas_price = w3.eth.gas_price
 
+    max_priority_fee = w3.eth.max_priority_fee
+
     if gas_price > w3.toWei(gas_limit_for_transaction, 'gwei'):
         raise ValueError("Current gas prise {0} is above --gas_limit_for_transaction".format(gas_price))
 
     for allocation in allocations:
         txn = contract.functions.closeAllocation(w3.toChecksumAddress(allocation["id"]), poi).buildTransaction({
             'gas': gas_limit,
-            'gasPrice': gas_price,
+            'maxPriorityFeePerGas': max_priority_fee,
             'from': address,
-            'nonce': nonce
+            'nonce': nonce,
+            'type': 2
             })
         signed_txn = wallet.sign_transaction(txn)
         txn = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
@@ -185,7 +201,17 @@ def get_allocation_id(indexer_address: str, deployment: str, graphql_endpoint: s
        }""")
     query_data = t.substitute(indexer_address=indexer_address.lower(),
                               deployment=deployment)
-    request = requests.post(graphql_endpoint, json={'query': query_data})
+
+    #https://stackoverflow.com/questions/15431044/can-i-set-max-retries-for-requests-request
+    s = requests.Session()
+
+    retries = Retry(total=6,
+                    backoff_factor=0.1,
+                    status_forcelist=[ 500, 502, 503, 504, 404 ],
+                    allowed_methods=frozenset(['GET', 'POST']))
+    s.mount('http://', HTTPAdapter(max_retries=retries))
+
+    request = s.post(graphql_endpoint, json={'query': query_data})
 
     if request.status_code != 200:
         raise ValueError("Status code: {0}\nResponse: {1}".format(request.status_code,request.text))
