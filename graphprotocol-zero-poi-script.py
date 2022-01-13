@@ -13,6 +13,7 @@ import sys
 import base58
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from web3.middleware import geth_poa_middleware
 
 
 #Map for choose correct contract address for testnet or for mainnet
