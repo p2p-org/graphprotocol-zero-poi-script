@@ -1,8 +1,8 @@
 # graphprotocol-zero-poi-script
 Python3 script to close allocations using zero poi for provided subgraph.
-You can use this script only if indexer-agent is running in docker container.
+You can use this script only if indexer-agent is running in a docker container.
 
-## Actions which performed by script.
+## Actions which are performed by a script.
 1. Getting env variables (mnemonic, network, ethereum endpoint, postgresql credentials and url) from indexer agent container
 2. Get abi from https://gist.github.com/abarmat/b8f4c66b4d0cdd07e121290894f5dbb6
 3. Stop indexer agent container
