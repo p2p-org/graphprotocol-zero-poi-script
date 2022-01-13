@@ -127,9 +127,6 @@ def wait_for_txns(txns: list, ethereum_rpc: str) -> list:
 
     w3 = web3.Web3(web3.Web3.HTTPProvider(ethereum_rpc))
 
-    #https://stackoverflow.com/questions/68449832/web3-extradatalength-error-on-the-binance-smart-chain-using-python
-    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
-
     for txn in txns:
         receipt = w3.eth.waitForTransactionReceipt(txn)
         if receipt.status == 0:
@@ -156,6 +153,9 @@ def create_txn(mnemonic: str, allocations: dict, poi: str, ethereum_rpc: str, co
     txns=[]
 
     w3 = web3.Web3(web3.Web3.HTTPProvider(ethereum_rpc))
+
+    #https://stackoverflow.com/questions/68449832/web3-extradatalength-error-on-the-binance-smart-chain-using-python
+    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
     web3.eth.Account.enable_unaudited_hdwallet_features()
     wallet = w3.eth.account.from_mnemonic(mnemonic)
